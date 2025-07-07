@@ -1,1 +1,19 @@
-.o
+# Binaire compilé
+pipex
+
+# Fichiers objets
+*.o
+
+# Libft compilée
+Libft/libft.a
+
+# Fichiers de test
+infile
+outfile
+
+# Éditeurs
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
