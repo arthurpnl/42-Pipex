@@ -1,6 +1,6 @@
 #include "pipex.h"
 
-int launch_all_process(t_pipex *pipex, char **envp)
+int launch_all_process(t_pipex *pipex, char **envp, int here_doc_fd[2])
 {
     int i;
     pid_t   pid;
@@ -16,18 +16,16 @@ int launch_all_process(t_pipex *pipex, char **envp)
         }
         else if (pid == 0)
         {
-            handle_redirect(pipex, i);
+        	if (pipex->is_heredoc)
+        		handle_heredoc_redirect(pipex, i, here_doc_fd);
+        	else
+            	handle_redirect(pipex, i);
             exec_cmd(pipex, i, envp);
             exit(EXIT_FAILURE);
         }
-
         i++;
     }
-    for (int i = 0; i < pipex->cmd_count - 1; i++)
-    {
-        close(pipex->pipes[i][0]);
-        close(pipex->pipes[i][1]);
-    }
+	close_all_pipes(pipex, here_doc_fd);
     while (wait(NULL) > 0 )
         ;
     return SUCCESS;

@@ -21,6 +21,7 @@ typedef struct s_pipex
     int     outfile;
     int     cmd_count;
     int     is_heredoc;
+    char	*delimiter;
     int     **pipes;
     char    **path;
     char    ***cmd_args; 
@@ -34,7 +35,8 @@ int	parse_commands(t_pipex *pipex, int argc, char **argv);
 
 // setup 
 int setup_pipe(t_pipex *pipex);
-int handle_redirect(t_pipex *pipex, int i);
+void handle_redirect(t_pipex *pipex, int i);
+int	handle_heredoc_redirect(t_pipex *pipex, int i, int here_doc_fd[2]);
 
 // exec
 int exec_cmd(t_pipex *pipex, int i, char **envp);
@@ -43,6 +45,12 @@ int exec_cmd(t_pipex *pipex, int i, char **envp);
 void    get_cmd_path(t_pipex *pipex, char **envp);
 
 // pipex
-int launch_all_process(t_pipex *pipex, char **envp);
+int launch_all_process(t_pipex *pipex, char **envp, int here_doc_fd[2]);
+
+// here_doc
+void	handle_here_doc(char *delimiter, int pipe_fd[2]);
+
+// close
+void close_all_pipes(t_pipex *pipex, int here_doc_fd[2]);
 
 #endif

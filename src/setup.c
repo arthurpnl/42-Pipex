@@ -29,11 +29,11 @@ int setup_pipe(t_pipex *pipex)
         return (SUCCESS);
 }
 
-int handle_redirect(t_pipex *pipex, int i)
-{
-    int j;
 
-    j = 0;
+// 1 ecriture
+// 0 lecture
+void handle_redirect(t_pipex *pipex, int i)
+{
     if (i == 0)
     {
         dup2(pipex->infile, STDIN_FILENO);
@@ -49,13 +49,26 @@ int handle_redirect(t_pipex *pipex, int i)
         dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
         dup2(pipex->outfile, STDOUT_FILENO);
     }
-    while (j < pipex->cmd_count - 1)
-    {
-        close(pipex->pipes[j][0]);
-        close(pipex->pipes[j][1]);
-        j++;
-    }
-    close(pipex->infile);
-    close(pipex->outfile);
-    return (SUCCESS);
+	close_all_pipes(pipex, NULL);
+}
+
+int	handle_heredoc_redirect(t_pipex *pipex, int i, int here_doc_fd[2])
+{
+	if (i == 0)
+	{
+		dup2(here_doc_fd[0], STDIN_FILENO);
+		dup2(pipex->pipes[0][1], STDOUT_FILENO);
+	}
+	else if (i < pipex->cmd_count - 1)
+	{
+		dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
+		dup2(pipex->pipes[i][1], STDOUT_FILENO);
+	}
+	else
+	{
+		dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
+		dup2(pipex->outfile, STDOUT_FILENO);
+	}
+	close_all_pipes(pipex, here_doc_fd);
+	return(SUCCESS);
 }

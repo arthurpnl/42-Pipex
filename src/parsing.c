@@ -10,6 +10,8 @@ int	parser(t_pipex *pipex, int argc, char **argv)
 		return (FAILURE);
 	return (SUCCESS); 
 }
+
+// pas besoin pour minishell 
 int	validate_args(t_pipex *pipex, int argc, char **argv)
 {
 	if (argc < 5)
@@ -80,4 +82,6 @@ int	parse_commands(t_pipex *pipex, int argc, char **argv)
 	}
 	return (SUCCESS);
 }
+
+
 
