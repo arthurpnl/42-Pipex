@@ -56,5 +56,7 @@ void close_all_pipes(t_pipex *pipex, int here_doc_fd[2]);
 // free
 void	free_pipes(t_pipex *pipex, int count);
 void	free_args(t_pipex *pipex, int count);
+void cleanup(t_pipex *pipex);
+void	free_split(t_pipex *pipex);
 
 #endif

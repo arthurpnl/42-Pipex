@@ -7,7 +7,7 @@ void	free_pipes(t_pipex *pipex, int count)
 	i = 0;
 	while(i < count)
 	{
-		if (pipex->pipes)
+		if (pipex->pipes[i])
 			free(pipex->pipes[i]);
 		i++;
 	}
@@ -37,4 +37,32 @@ void	free_args(t_pipex *pipex, int count)
 	}
 	free(pipex->cmd_args);
 	pipex->cmd_args = NULL;
+}
+
+void	free_split(t_pipex *pipex)
+{
+	int	i;
+
+	i = 0;
+	while(pipex->path[i])
+	{
+		free(pipex->path[i]);
+		i++;
+	}
+	free(pipex->path);
+	pipex->path = NULL;
+}
+
+void cleanup(t_pipex *pipex)
+{
+	if (pipex->infile != -1)
+		close(pipex->infile);
+	if (pipex->outfile != -1)
+		close(pipex->outfile);
+	if (pipex->pipes)
+		free_pipes(pipex, pipex->cmd_count - 1);
+	if (pipex->cmd_args)
+		free_args(pipex, pipex->cmd_count);
+	if (pipex->path)
+		free_split(pipex);
 }
