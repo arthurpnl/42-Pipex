@@ -67,6 +67,7 @@ int	parse_commands(t_pipex *pipex, int argc, char **argv)
 	if (!pipex->cmd_args)
 	{
 		ft_putstr_fd("Malloc failed\n", 2);
+		free_args(pipex, pipex->cmd_count);
 		return (FAILURE);
 	}
 	i = 0;

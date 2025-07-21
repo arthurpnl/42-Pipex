@@ -17,11 +17,13 @@ int setup_pipe(t_pipex *pipex)
         if (!pipex->pipes[i])
         {
             ft_putstr_fd(MALLOC_FAILED, 2);
+			free_pipes(pipex, i);
             return (FAILURE);
         }
         if (pipe(pipex->pipes[i]) == -1)
         {
             ft_putstr_fd("Pipe creation failed.\n", 2);
+            free_pipes(pipex, i);
             return (FAILURE);
         }
         i++;

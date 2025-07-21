@@ -53,4 +53,8 @@ void	handle_here_doc(char *delimiter, int pipe_fd[2]);
 // close
 void close_all_pipes(t_pipex *pipex, int here_doc_fd[2]);
 
+// free
+void	free_pipes(t_pipex *pipex, int count);
+void	free_args(t_pipex *pipex, int count);
+
 #endif
